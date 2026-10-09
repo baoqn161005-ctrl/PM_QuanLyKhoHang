@@ -8,6 +8,6 @@ namespace QLKhoHang.DTO
         public string MaNV { get; set; }
         public string HoTen { get; set; }
         public string VaiTro { get; set; }
-        public string TenDangNhap { get; set; }
+        public string TaiKhoan { get; set; }
     }
 }

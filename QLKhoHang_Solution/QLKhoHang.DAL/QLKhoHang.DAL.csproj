@@ -36,13 +36,18 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="CauHinhCSDL_DAL.cs" />
     <Compile Include="NhanVienDAL.cs" />
+    <Compile Include="PasswordHasher.cs" />
+    <Compile Include="SaoLuuDAL.cs" />
+    <Compile Include="SqlServerNameSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

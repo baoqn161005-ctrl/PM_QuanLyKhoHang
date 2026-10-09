@@ -26,5 +26,14 @@ namespace QLKhoHang.GUI.Properties
                 return defaultInstance;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TaiKhoanGanNhat
+        {
+            get { return ((string)(this["TaiKhoanGanNhat"])); }
+            set { this["TaiKhoanGanNhat"] = value; }
+        }
     }
 }
