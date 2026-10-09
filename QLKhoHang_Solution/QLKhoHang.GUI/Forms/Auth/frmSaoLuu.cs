@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -8,103 +9,22 @@ using System.Windows.Forms;
 using QLKhoHang.BUS;
 using QLKhoHang.GUI.Common;
 
-namespace QLKhoHang.GUI.Forms.Main
+namespace QLKhoHang.GUI.Forms.Auth
 {
     /// <summary>
     /// Backup database hiện cấu hình; restore chỉ tạo database test mới, không thay thế database nguồn.
     /// </summary>
-    public class frmSaoLuu : Form
+    public partial class frmSaoLuu : Form
     {
         private readonly SaoLuuBUS _saoLuuBUS = new SaoLuuBUS();
-        private readonly Label lblDatabase = new Label();
-        private readonly Label lblTrangThai = new Label();
-        private readonly Button btnSaoLuu = new Button();
-        private readonly Button btnKhoiPhuc = new Button();
 
         public frmSaoLuu()
         {
             InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            Text = "Sao lưu và khôi phục dữ liệu";
-            Name = "frmSaoLuu";
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            StartPosition = FormStartPosition.CenterParent;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            ClientSize = new Size(620, 350);
-            BackColor = Color.FromArgb(248, 250, 252);
-            Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-
-            Label lblTieuDe = new Label
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
             {
-                Name = "lblTieuDeSaoLuu",
-                Text = "SAO LƯU / KHÔI PHỤC DATABASE",
-                Location = new Point(28, 20),
-                Size = new Size(560, 38),
-                ForeColor = Color.FromArgb(30, 41, 59),
-                Font = new Font("Segoe UI", 15F, FontStyle.Bold)
-            };
-            Label lblDatabaseTitle = new Label
-            {
-                Name = "lblDatabaseTitle",
-                Text = "Database theo App.config:",
-                Location = new Point(32, 77),
-                Size = new Size(190, 26)
-            };
-            lblDatabase.Name = "lblDatabaseNguon";
-            lblDatabase.Text = _saoLuuBUS.LayDatabaseDangCauHinh();
-            lblDatabase.Location = new Point(225, 77);
-            lblDatabase.Size = new Size(350, 26);
-            lblDatabase.ForeColor = Color.FromArgb(13, 116, 88);
-            lblDatabase.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            Label lblCanhBao = new Label
-            {
-                Name = "lblCanhBaoSaoLuu",
-                Text = "Backup ghi file do dịch vụ SQL Server truy cập được. Restore chỉ tạo database mới có tên QLKhoHang_TestRestore_...; không ghi đè database hiện cấu hình.",
-                Location = new Point(32, 116),
-                Size = new Size(555, 68),
-                ForeColor = Color.FromArgb(153, 27, 27),
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular)
-            };
-
-            btnSaoLuu.Name = "btnSaoLuuDatabase";
-            btnSaoLuu.Text = "SAO LƯU DATABASE";
-            btnSaoLuu.Location = new Point(32, 205);
-            btnSaoLuu.Size = new Size(245, 48);
-            btnSaoLuu.BackColor = Color.FromArgb(37, 99, 235);
-            btnSaoLuu.ForeColor = Color.White;
-            btnSaoLuu.FlatStyle = FlatStyle.Flat;
-            btnSaoLuu.FlatAppearance.BorderSize = 0;
-            btnSaoLuu.Click += BtnSaoLuu_Click;
-
-            btnKhoiPhuc.Name = "btnKhoiPhucDatabaseTest";
-            btnKhoiPhuc.Text = "KHÔI PHỤC SANG DB TEST MỚI";
-            btnKhoiPhuc.Location = new Point(296, 205);
-            btnKhoiPhuc.Size = new Size(291, 48);
-            btnKhoiPhuc.BackColor = Color.FromArgb(220, 38, 38);
-            btnKhoiPhuc.ForeColor = Color.White;
-            btnKhoiPhuc.FlatStyle = FlatStyle.Flat;
-            btnKhoiPhuc.FlatAppearance.BorderSize = 0;
-            btnKhoiPhuc.Click += BtnKhoiPhuc_Click;
-
-            lblTrangThai.Name = "lblTrangThaiSaoLuu";
-            lblTrangThai.Text = "Chưa thực hiện thao tác.";
-            lblTrangThai.Location = new Point(32, 275);
-            lblTrangThai.Size = new Size(555, 42);
-            lblTrangThai.ForeColor = Color.FromArgb(71, 85, 105);
-            lblTrangThai.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-
-            Controls.Add(lblTieuDe);
-            Controls.Add(lblDatabaseTitle);
-            Controls.Add(lblDatabase);
-            Controls.Add(lblCanhBao);
-            Controls.Add(btnSaoLuu);
-            Controls.Add(btnKhoiPhuc);
-            Controls.Add(lblTrangThai);
+                lblDatabase.Text = _saoLuuBUS.LayDatabaseDangCauHinh();
+            }
         }
 
         private async void BtnSaoLuu_Click(object sender, EventArgs e)
@@ -232,6 +152,11 @@ namespace QLKhoHang.GUI.Forms.Main
             lblTrangThai.Text = message;
             lblTrangThai.ForeColor = Color.FromArgb(185, 28, 28);
             MessageBox.Show(message, "Thao tác thất bại", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void BtnDong_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
