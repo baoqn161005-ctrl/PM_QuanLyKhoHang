@@ -79,8 +79,24 @@
     <Compile Include="Forms\Auth\frmSaoLuu.Designer.cs">
       <DependentUpon>frmSaoLuu.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmHangHoa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHangHoa.Designer.cs">
+      <DependentUpon>frmHangHoa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNhaCungCap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNhaCungCap.Designer.cs">
+      <DependentUpon>frmNhaCungCap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\UIThemeHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmNhaCungCap.resx">
+      <DependentUpon>frmNhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -107,6 +123,10 @@
     <ProjectReference Include="..\QLKhoHang.BUS\QLKhoHang.BUS.csproj">
       <Project>{500171e3-3bfa-458c-b707-24f5c6d90275}</Project>
       <Name>QLKhoHang.BUS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QLKhoHang.DAL\QLKhoHang.DAL.csproj">
+      <Project>{679e96b4-a2d4-4d93-86ce-15dafdaac89e}</Project>
+      <Name>QLKhoHang.DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\QLKhoHang.DTO\QLKhoHang.DTO.csproj">
       <Project>{296ed0f1-4dd2-4f5f-904c-a57b4d4683ec}</Project>

@@ -75,3 +75,7 @@ BEGIN CATCH
     RAISERROR(@ErrorMessage, 16, 1);
 END CATCH;
 GO
+
+SELECT MaSP, TenSP, LoaiHang, SoLuongTon, TonToiThieu
+FROM dbo.HangHoa
+WHERE SoLuongTon <= TonToiThieu;

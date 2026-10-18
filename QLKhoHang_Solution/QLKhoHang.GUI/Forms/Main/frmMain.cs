@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using QLKhoHang.BUS;
 using QLKhoHang.DTO;
+using QLKhoHang.GUI;
 using QLKhoHang.GUI.Common;
 using QLKhoHang.GUI.Forms.Auth;
 
@@ -13,6 +14,7 @@ namespace QLKhoHang.GUI.Forms.Main
     public partial class frmMain : Form
     {
         private readonly PhanQuyenBUS _phanQuyenBUS = new PhanQuyenBUS();
+        private Form _activeChildForm = null;
 
         public frmMain()
         {
@@ -37,6 +39,32 @@ namespace QLKhoHang.GUI.Forms.Main
         private static NhanVienDTO GetDesignUser()
         {
             return new NhanVienDTO { HoTen = "Nguyễn Văn An", VaiTro = "Quản lý kho" };
+        }
+
+        private void HienThiFormCon(Form childForm, string tieuDe)
+        {
+            // Đóng và giải phóng form con cũ nếu đang mở
+            if (_activeChildForm != null)
+            {
+                _activeChildForm.Close();
+                _activeChildForm.Dispose();
+                _activeChildForm = null;
+            }
+
+            _activeChildForm = childForm;
+            lblTieuDe.Text = tieuDe;
+            pnlDashboard.Visible = false;
+            pnlModulePlaceholder.Visible = true;
+            lblModulePlaceholder.Visible = false; // Ẩn nhãn tạm thời của TV1
+
+            // Quy cách nhúng Form con theo Mục 1.3: TopLevel = false, None, Dock = Fill
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            pnlModulePlaceholder.Controls.Add(childForm);
+            pnlModulePlaceholder.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
         }
 
         private void HienThiNguoiDung(NhanVienDTO user)
@@ -94,6 +122,13 @@ namespace QLKhoHang.GUI.Forms.Main
             ChucNang chucNang = (ChucNang)button.Tag;
             if (chucNang == ChucNang.TongQuan)
             {
+                if (_activeChildForm != null)
+                {
+                    _activeChildForm.Close();
+                    _activeChildForm.Dispose();
+                    _activeChildForm = null;
+                }
+                lblModulePlaceholder.Visible = true;
                 pnlDashboard.Visible = true;
                 pnlModulePlaceholder.Visible = false;
                 lblTieuDe.Text = "TỔNG QUAN HỆ THỐNG";
@@ -119,6 +154,28 @@ namespace QLKhoHang.GUI.Forms.Main
                     return;
                 }
 
+                // Tích hợp form Nhà cung cấp của TV2
+                if (chucNang == ChucNang.NhaCungCap)
+                {
+                    HienThiFormCon(new frmNhaCungCap(), "QUẢN LÝ DANH MỤC NHÀ CUNG CẤP");
+                    return;
+                }
+
+                // Tích hợp form Hàng hóa của TV2 (sẵn sàng khi bạn hoàn thành frmHangHoa)
+                 if (chucNang == ChucNang.HangHoa)
+                {
+                   HienThiFormCon(new frmHangHoa(), "QUẢN LÝ DANH MỤC HÀNG HÓA");
+                    return;
+                 }
+
+                // Các module khác chưa hoàn tất sẽ hiển thị màn hình chờ mặc định
+                if (_activeChildForm != null)
+                {
+                    _activeChildForm.Close();
+                    _activeChildForm.Dispose();
+                    _activeChildForm = null;
+                }
+                lblModulePlaceholder.Visible = true;
                 lblModulePlaceholder.Text = tenModule + Environment.NewLine + Environment.NewLine +
                     "Màn hình này sẽ được tích hợp khi hoàn tất module được phân công.";
                 lblTieuDe.Text = tenModule.ToUpperInvariant();
