@@ -30,10 +30,46 @@ namespace QLKhoHang.GUI.Forms.Main
             CauHinhMenu(user);
             HienThiTongQuan(user);
 
+            // 1. Gọi hàm tạo nút Giới thiệu ở đây
+            ThemNutGioiThieu();
+
+            // 2. Đoạn này phải nằm trong frmMain(), KHÔNG nằm trong ThemNutGioiThieu
             if (!designTime)
             {
                 FormClosed += delegate { SessionManager.DangXuat(); };
             }
+        }
+
+        // Phương thức tạo nút Giới thiệu gắn vào thanh menu
+        private void ThemNutGioiThieu()
+        {
+            Button btnAbout = new Button();
+            btnAbout.Text = "Giới thiệu đề tài";
+            btnAbout.Size = new Size(200, 42);
+            btnAbout.FlatStyle = FlatStyle.Flat;
+            btnAbout.FlatAppearance.BorderSize = 0;
+            btnAbout.BackColor = Color.FromArgb(16, 44, 59); // Màu nền chuẩn menu
+            btnAbout.ForeColor = Color.FromArgb(226, 232, 240);
+            btnAbout.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
+            btnAbout.TextAlign = ContentAlignment.MiddleLeft;
+            btnAbout.Padding = new Padding(12, 0, 0, 0);
+            btnAbout.Cursor = Cursors.Hand;
+
+            // Hiệu ứng rê chuột
+            btnAbout.MouseEnter += (s, e) => { btnAbout.BackColor = Color.FromArgb(19, 126, 119); };
+            btnAbout.MouseLeave += (s, e) => { btnAbout.BackColor = Color.FromArgb(16, 44, 59); };
+
+            // Bấm vào để mở popup frmAbout
+            btnAbout.Click += (s, e) =>
+            {
+                using (frmAbout f = new frmAbout())
+                {
+                    f.ShowDialog(this);
+                }
+            };
+
+            // Đưa nút vào danh sách menu bên trái (kết thúc tại đây)
+            flpMenu.Controls.Add(btnAbout);
         }
 
         private static NhanVienDTO GetDesignUser()
