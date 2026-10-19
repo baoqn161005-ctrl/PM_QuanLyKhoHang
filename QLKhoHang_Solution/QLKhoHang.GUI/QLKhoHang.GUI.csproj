@@ -79,6 +79,12 @@
     <Compile Include="Forms\Auth\frmSaoLuu.Designer.cs">
       <DependentUpon>frmSaoLuu.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAbout.Designer.cs">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmHangHoa.cs">
       <SubType>Form</SubType>
     </Compile>
