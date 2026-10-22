@@ -1,11 +1,12 @@
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 using QLKhoHang.BUS;
 using QLKhoHang.DTO;
 using QLKhoHang.GUI.Common;
 using QLKhoHang.GUI.Forms.Auth;
+using QLKhoHang.GUI.Forms.Transactions;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace QLKhoHang.GUI.Forms.Main
 {
@@ -93,7 +94,15 @@ namespace QLKhoHang.GUI.Forms.Main
 
             ChucNang chucNang = (ChucNang)button.Tag;
             if (chucNang == ChucNang.TongQuan)
-            {
+            { 
+                if (_activeModuleForm != null)
+                {
+                    _activeModuleForm.Close();
+                    _activeModuleForm.Dispose();
+                    _activeModuleForm = null;
+                }
+            
+
                 pnlDashboard.Visible = true;
                 pnlModulePlaceholder.Visible = false;
                 lblTieuDe.Text = "TỔNG QUAN HỆ THỐNG";
@@ -101,6 +110,30 @@ namespace QLKhoHang.GUI.Forms.Main
             }
 
             OpenModule(chucNang, button.Text);
+        }
+
+        private Form _activeModuleForm = null;
+
+        private void EmbedChildForm(Form childForm)
+        {
+            if (_activeModuleForm != null)
+            {
+                _activeModuleForm.Close();
+                _activeModuleForm.Dispose();
+            }
+
+            _activeModuleForm = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+
+            pnlDashboard.Visible = false;
+            pnlModulePlaceholder.Visible = false;
+
+            pnlWorkspace.Controls.Add(childForm);
+            pnlWorkspace.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
         }
 
         private void OpenModule(ChucNang chucNang, string tenModule)
@@ -119,6 +152,27 @@ namespace QLKhoHang.GUI.Forms.Main
                     return;
                 }
 
+                // TÍCH HỢP FORM NHẬP KHO 
+                if (chucNang == ChucNang.NhapKho)
+                {
+                    lblTieuDe.Text = "LẬP PHIẾU NHẬP KHO";
+                    EmbedChildForm(new frmNhapKho());
+                    return;
+                }
+                // TÍCH HỢP FORM XUẤT KHO 
+                if (chucNang == ChucNang.XuatKho)
+                {
+                    lblTieuDe.Text = "LẬP PHIẾU XUẤT KHO";
+                    EmbedChildForm(new frmXuatKho());
+                    return;
+                }
+                // TÍCH HỢP FORM KIỂM KÊ KHO 
+                if (chucNang == ChucNang.KiemKe)
+                {
+                    lblTieuDe.Text = "KIỂM KÊ VÀ CÂN BẰNG KHO";
+                    EmbedChildForm(new frmKiemKe());
+                    return;
+                }
                 lblModulePlaceholder.Text = tenModule + Environment.NewLine + Environment.NewLine +
                     "Màn hình này sẽ được tích hợp khi hoàn tất module được phân công.";
                 lblTieuDe.Text = tenModule.ToUpperInvariant();

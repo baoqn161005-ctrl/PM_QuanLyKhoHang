@@ -79,8 +79,44 @@
     <Compile Include="Forms\Auth\frmSaoLuu.Designer.cs">
       <DependentUpon>frmSaoLuu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Transactions\frmKiemKe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmKiemKe.Designer.cs">
+      <DependentUpon>frmKiemKe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmNhapKho.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmNhapKho.Designer.cs">
+      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmTimKiemNhanh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmTimKiemNhanh.Designer.cs">
+      <DependentUpon>frmTimKiemNhanh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmXuatKho.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Transactions\frmXuatKho.Designer.cs">
+      <DependentUpon>frmXuatKho.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\Transactions\frmKiemKe.resx">
+      <DependentUpon>frmKiemKe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Transactions\frmNhapKho.resx">
+      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Transactions\frmTimKiemNhanh.resx">
+      <DependentUpon>frmTimKiemNhanh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Transactions\frmXuatKho.resx">
+      <DependentUpon>frmXuatKho.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

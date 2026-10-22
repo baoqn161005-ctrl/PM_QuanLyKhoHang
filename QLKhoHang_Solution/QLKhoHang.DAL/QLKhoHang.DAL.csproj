@@ -44,8 +44,11 @@
   <ItemGroup>
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="CauHinhCSDL_DAL.cs" />
+    <Compile Include="KiemKeDAL.cs" />
     <Compile Include="NhanVienDAL.cs" />
     <Compile Include="PasswordHasher.cs" />
+    <Compile Include="PhieuNhapDAL.cs" />
+    <Compile Include="PhieuXuatDAL.cs" />
     <Compile Include="SaoLuuDAL.cs" />
     <Compile Include="SqlServerNameSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
