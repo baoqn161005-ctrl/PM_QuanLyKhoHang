@@ -105,5 +105,10 @@ namespace QLKhoHang.GUI.Forms.Auth
                 // Lỗi lưu tùy chọn này không làm thay đổi kết quả đăng nhập.
             }
         }
+
+        private void cboVaiTro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
