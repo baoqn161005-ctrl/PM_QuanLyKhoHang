@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using QLKhoHang.BUS;
 using QLKhoHang.DTO;
+using QLKhoHang.GUI;
 using QLKhoHang.GUI.Common;
 using QLKhoHang.GUI.Forms.Auth;
 using QLKhoHang.GUI.Forms.Inventory;
@@ -30,6 +31,10 @@ namespace QLKhoHang.GUI.Forms.Main
             CauHinhMenu(user);
             HienThiTongQuan(user);
 
+            // 1. Gọi hàm tạo nút Giới thiệu ở đây
+            ThemNutGioiThieu();
+
+            // 2. Đoạn này phải nằm trong frmMain(), KHÔNG nằm trong ThemNutGioiThieu
             if (!designTime)
             {
                 FormClosed += delegate
@@ -40,9 +45,67 @@ namespace QLKhoHang.GUI.Forms.Main
             }
         }
 
+        // Phương thức tạo nút Giới thiệu gắn vào thanh menu
+        private void ThemNutGioiThieu()
+        {
+            Button btnAbout = new Button();
+            btnAbout.Text = "Giới thiệu đề tài";
+            btnAbout.Size = new Size(200, 42);
+            btnAbout.FlatStyle = FlatStyle.Flat;
+            btnAbout.FlatAppearance.BorderSize = 0;
+            btnAbout.BackColor = Color.FromArgb(16, 44, 59); // Màu nền chuẩn menu
+            btnAbout.ForeColor = Color.FromArgb(226, 232, 240);
+            btnAbout.Font = new Font("Segoe UI", 10f, FontStyle.Regular);
+            btnAbout.TextAlign = ContentAlignment.MiddleLeft;
+            btnAbout.Padding = new Padding(12, 0, 0, 0);
+            btnAbout.Cursor = Cursors.Hand;
+
+            // Hiệu ứng rê chuột
+            btnAbout.MouseEnter += (s, e) => { btnAbout.BackColor = Color.FromArgb(19, 126, 119); };
+            btnAbout.MouseLeave += (s, e) => { btnAbout.BackColor = Color.FromArgb(16, 44, 59); };
+
+            // Bấm vào để mở popup frmAbout
+            btnAbout.Click += (s, e) =>
+            {
+                using (frmAbout f = new frmAbout())
+                {
+                    f.ShowDialog(this);
+                }
+            };
+
+            // Đưa nút vào danh sách menu bên trái (kết thúc tại đây)
+            flpMenu.Controls.Add(btnAbout);
+        }
+
         private static NhanVienDTO GetDesignUser()
         {
             return new NhanVienDTO { HoTen = "Nguyễn Văn An", VaiTro = "Quản lý kho" };
+        }
+
+        private void HienThiFormCon(Form childForm, string tieuDe)
+        {
+            // Đóng và giải phóng form con cũ nếu đang mở
+            if (_activeChildForm != null)
+            {
+                _activeChildForm.Close();
+                _activeChildForm.Dispose();
+                _activeChildForm = null;
+            }
+
+            _activeChildForm = childForm;
+            lblTieuDe.Text = tieuDe;
+            pnlDashboard.Visible = false;
+            pnlModulePlaceholder.Visible = true;
+            lblModulePlaceholder.Visible = false; // Ẩn nhãn tạm thời của TV1
+
+            // Quy cách nhúng Form con theo Mục 1.3: TopLevel = false, None, Dock = Fill
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            pnlModulePlaceholder.Controls.Add(childForm);
+            pnlModulePlaceholder.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
         }
 
         private void HienThiNguoiDung(NhanVienDTO user)
