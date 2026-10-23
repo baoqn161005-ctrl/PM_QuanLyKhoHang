@@ -7,6 +7,7 @@ using QLKhoHang.DTO;
 using QLKhoHang.GUI;
 using QLKhoHang.GUI.Common;
 using QLKhoHang.GUI.Forms.Auth;
+using QLKhoHang.GUI.Forms.Inventory;
 
 namespace QLKhoHang.GUI.Forms.Main
 {
@@ -14,7 +15,7 @@ namespace QLKhoHang.GUI.Forms.Main
     public partial class frmMain : Form
     {
         private readonly PhanQuyenBUS _phanQuyenBUS = new PhanQuyenBUS();
-        private Form _activeChildForm = null;
+        private Form _embeddedModule;
 
         public frmMain()
         {
@@ -36,7 +37,11 @@ namespace QLKhoHang.GUI.Forms.Main
             // 2. Đoạn này phải nằm trong frmMain(), KHÔNG nằm trong ThemNutGioiThieu
             if (!designTime)
             {
-                FormClosed += delegate { SessionManager.DangXuat(); };
+                FormClosed += delegate
+                {
+                    CloseEmbeddedModule();
+                    SessionManager.DangXuat();
+                };
             }
         }
 
@@ -158,13 +163,7 @@ namespace QLKhoHang.GUI.Forms.Main
             ChucNang chucNang = (ChucNang)button.Tag;
             if (chucNang == ChucNang.TongQuan)
             {
-                if (_activeChildForm != null)
-                {
-                    _activeChildForm.Close();
-                    _activeChildForm.Dispose();
-                    _activeChildForm = null;
-                }
-                lblModulePlaceholder.Visible = true;
+                CloseEmbeddedModule();
                 pnlDashboard.Visible = true;
                 pnlModulePlaceholder.Visible = false;
                 lblTieuDe.Text = "TỔNG QUAN HỆ THỐNG";
@@ -190,30 +189,22 @@ namespace QLKhoHang.GUI.Forms.Main
                     return;
                 }
 
-                // Tích hợp form Nhà cung cấp của TV2
-                if (chucNang == ChucNang.NhaCungCap)
+                if (chucNang == ChucNang.TheKho)
                 {
-                    HienThiFormCon(new frmNhaCungCap(), "QUẢN LÝ DANH MỤC NHÀ CUNG CẤP");
+                    ShowEmbeddedModule(new frmTheKho(), tenModule);
                     return;
                 }
 
-                // Tích hợp form Hàng hóa của TV2 (sẵn sàng khi bạn hoàn thành frmHangHoa)
-                 if (chucNang == ChucNang.HangHoa)
+                if (chucNang == ChucNang.BaoCaoTonKho)
                 {
-                   HienThiFormCon(new frmHangHoa(), "QUẢN LÝ DANH MỤC HÀNG HÓA");
+                    ShowEmbeddedModule(new frmBaoCaoTonKho(), tenModule);
                     return;
-                 }
-
-                // Các module khác chưa hoàn tất sẽ hiển thị màn hình chờ mặc định
-                if (_activeChildForm != null)
-                {
-                    _activeChildForm.Close();
-                    _activeChildForm.Dispose();
-                    _activeChildForm = null;
                 }
-                lblModulePlaceholder.Visible = true;
+
+                CloseEmbeddedModule();
                 lblModulePlaceholder.Text = tenModule + Environment.NewLine + Environment.NewLine +
                     "Màn hình này sẽ được tích hợp khi hoàn tất module được phân công.";
+                lblModulePlaceholder.Visible = true;
                 lblTieuDe.Text = tenModule.ToUpperInvariant();
                 pnlDashboard.Visible = false;
                 pnlModulePlaceholder.Visible = true;
@@ -222,6 +213,37 @@ namespace QLKhoHang.GUI.Forms.Main
             {
                 MessageBox.Show(ex.Message, "Không đủ quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void ShowEmbeddedModule(Form module, string moduleTitle)
+        {
+            CloseEmbeddedModule();
+
+            lblModulePlaceholder.Visible = false;
+            lblTieuDe.Text = moduleTitle.ToUpperInvariant();
+            pnlDashboard.Visible = false;
+            pnlModulePlaceholder.Visible = true;
+
+            module.TopLevel = false;
+            module.FormBorderStyle = FormBorderStyle.None;
+            module.Dock = DockStyle.Fill;
+            _embeddedModule = module;
+            pnlModulePlaceholder.Controls.Add(module);
+            module.Show();
+            module.BringToFront();
+        }
+
+        private void CloseEmbeddedModule()
+        {
+            if (_embeddedModule != null)
+            {
+                pnlModulePlaceholder.Controls.Remove(_embeddedModule);
+                _embeddedModule.Close();
+                _embeddedModule.Dispose();
+                _embeddedModule = null;
+            }
+
+            lblModulePlaceholder.Visible = true;
         }
 
         private void HienThiTongQuan(NhanVienDTO user)
